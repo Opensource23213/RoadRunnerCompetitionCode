@@ -846,7 +846,7 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                         drive.followTrajectorySequence(traj3);
                                         armout(2);
                                         traj8 = drive.trajectorySequenceBuilder(traj3.end())
-                                                .lineToLinearHeading(getaprilpose(1, 37, 49, 0, 47, 37))
+                                                .lineToLinearHeading(getaprilpose(1, 37, 49, 0, 43, 44))
                                                 .build();
                                         drive.followTrajectorySequence(traj8);
                                         drop("frontr", "blue", pix);
@@ -876,8 +876,8 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                         drive.followTrajectorySequence(traj1);
                                         release();
                                         traj2 = drive.trajectorySequenceBuilder(traj1.end())
-                                                .lineToLinearHeading(new Pose2d(-39, 39, Math.toRadians(-90)))
-                                                .lineToLinearHeading(new Pose2d(-52, 36, Math.toRadians(180)))
+                                                .lineToLinearHeading(new Pose2d(-39, 44, Math.toRadians(-90)))
+                                                .lineToLinearHeading(new Pose2d(-52, 34, Math.toRadians(180)))
                                                 .lineToConstantHeading(new Vector2d(-61, 36))
                                                 .build();
                                         drive.followTrajectorySequence(traj2);
@@ -902,12 +902,12 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
 
                                         traj3 = drive.trajectorySequenceBuilder(traj5.end())
                                                 .splineToConstantHeading(new Vector2d(9, 58), Math.toRadians(0))
-                                                .splineToConstantHeading(new Vector2d(37, 40), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(37, 41), Math.toRadians(0))
                                                 .build();
                                         drive.followTrajectorySequence(traj3);
                                         armout(2);
                                         traj8 = drive.trajectorySequenceBuilder(traj3.end())
-                                                .lineToLinearHeading(getaprilpose(2, 37, 40, 0, 41, 37))
+                                                .lineToLinearHeading(getaprilpose(2, 37, 41, 0, 37, 44))
 
                                                 .build();
                                         drive.followTrajectorySequence(traj8);
@@ -930,9 +930,9 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                     case RIGHT:
                                         skip(stop - 1);
                                         traj1 = drive.trajectorySequenceBuilder(startbf)
-                                                .splineToConstantHeading(new Vector2d(-56.5, 50), Math.toRadians(-90))
-                                                .splineToConstantHeading(new Vector2d(-56.5, 38), Math.toRadians(-90))
-                                                .splineToConstantHeading(new Vector2d(-46, 32), Math.toRadians(-90))
+                                                .splineToConstantHeading(new Vector2d(-54.5, 50), Math.toRadians(-90))
+                                                .splineToConstantHeading(new Vector2d(-54.5, 38), Math.toRadians(-90))
+                                                .splineToConstantHeading(new Vector2d(-44, 32), Math.toRadians(-90))
                                                 .build();
                                         drive.followTrajectorySequence(traj1);
                                         release();
@@ -968,10 +968,10 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                         drive.followTrajectorySequence(traj3);
                                         armout(2);
                                         traj8 = drive.trajectorySequenceBuilder(traj3.end())
-                                                .lineToLinearHeading(getaprilpose(3, 37, 37 , 0, 34, 37))
+                                                .lineToLinearHeading(getaprilpose(3, 37, 38, 0, 30, 43))
                                                 .build();
                                         drive.followTrajectorySequence(traj8);
-                                        drop("frontr", "blue", pix);
+                                        drop("frontl", "blue", pix);
                                         if(parkPosition == THRU.WALL) {
                                             traj13 = drive.trajectorySequenceBuilder(traj8.end())
                                                     .lineToConstantHeading(new Vector2d(42, 63))
@@ -1036,7 +1036,7 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                         drive.followTrajectorySequence(traj3);
                                         armout(2);
                                         traj8 = drive.trajectorySequenceBuilder(traj3.end())
-                                                .lineToLinearHeading(getaprilpose(6, 37, -31, 0, -33, 37))
+                                                .lineToLinearHeading(getaprilpose(6, 38, -31, 0, -38, 44))
                                                 .build();
                                         drive.followTrajectorySequence(traj8);
                                         drop("frontl", "red", pix);
@@ -1097,7 +1097,7 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                         drive.followTrajectorySequence(traj3);
                                         armout(2);
                                         traj8 = drive.trajectorySequenceBuilder(traj3.end())
-                                                .lineToLinearHeading(getaprilpose(5, 37, -24.5f, 0, -23, 37))
+                                                .lineToLinearHeading(getaprilpose(5, 37, -26.5f, 0, -30, 44))
 
                                                 .build();
                                         drive.followTrajectorySequence(traj8);
@@ -1120,8 +1120,8 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                     case LEFT:
                                         skip(stop - 1);
                                         traj1 = drive.trajectorySequenceBuilder(startrf)
-                                                .splineToConstantHeading(new Vector2d(-56.5, -50), Math.toRadians(90))
-                                                .splineToConstantHeading(new Vector2d(-56.5, -38), Math.toRadians(90))
+                                                .splineToConstantHeading(new Vector2d(-52.5, -50), Math.toRadians(90))
+                                                .splineToConstantHeading(new Vector2d(-52.5, -38), Math.toRadians(90))
                                                 .splineToConstantHeading(new Vector2d(-44, -32), Math.toRadians(90))
                                                 .build();
                                         drive.followTrajectorySequence(traj1);
@@ -1153,12 +1153,12 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
 
                                         traj3 = drive.trajectorySequenceBuilder(traj5.end())
                                                 .splineToConstantHeading(new Vector2d(9, -57), Math.toRadians(0))
-                                                .splineToConstantHeading(new Vector2d(37, -22), Math.toRadians(0))
+                                                .splineToConstantHeading(new Vector2d(37, -21), Math.toRadians(0))
                                                 .build();
                                         drive.followTrajectorySequence(traj3);
                                         armout(2);
                                         traj8 = drive.trajectorySequenceBuilder(traj3.end())
-                                                .lineToLinearHeading(getaprilpose(4, 37, -16.5F, 0, -34, 37))
+                                                .lineToLinearHeading(getaprilpose(4, 37, -14.5F, 0, -26 , 42))
                                                 .build();
                                         drive.followTrajectorySequence(traj8);
                                         drop("frontr", "red", pix);
@@ -1563,8 +1563,7 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                         traj2 = drive.trajectorySequenceBuilder(traj1.end())
                                                 .lineToLinearHeading(new Pose2d(27, -5, Math.toRadians(90)))
                                                 .lineToLinearHeading(new Pose2d(40, -17, Math.toRadians(270)))
-                                                .lineToLinearHeading(new Pose2d(39
-                                                        , -26, Math.toRadians(270)))
+                                                .lineToLinearHeading(new Pose2d(39, -26, Math.toRadians(270)))
                                                 .build();
                                         drive.followTrajectorySequence(traj2);
                                         stack1();
@@ -1957,7 +1956,7 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
     public double pick(){
         double grabIn = 1;
         ilifty.setPosition(.5);
-        flippy.setPosition(.23);
+        flippy.setPosition(.18);
         double flipdis = flippydis.getDistance(DistanceUnit.INCH);
         telemetry.addData("flippydis: ", flipdis);
         telemetry.update();
@@ -2002,7 +2001,8 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                             }
 
                         } else {
-
+                            telemetry.addLine("Didn't read");
+                            telemetry.update();
                         }
                     }
 
@@ -2058,6 +2058,8 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                 y += xpose;
                             }
                         } else {
+                            telemetry.addLine("Didn't read");
+                            telemetry.update();
                         }
                     }
 
@@ -2066,25 +2068,25 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
             }
             if (xpose == 0) {
                 if (id == 1) {
-                    y2 += (int) distancechange(7, "frontr");
+                    x2 += (int) distancechange(7, "frontr");
                 }
                 if (id == 4) {
-                    y2 += (int) distancechange(7, "frontr");
+                    x2 += (int) distancechange(7, "frontr");
                 }
                 if (id == 5) {
-                    y2 += (int) distancechange(7, "front");
+                    x2 += (int) distancechange(7, "front");
                 }
                 if (id == 6) {
-                    y2 += (int) distancechange(7, "frontl");
+                    x2 += (int) distancechange(7, "frontl");
                 }
                 if (id == 2) {
-                    y2 += (int) distancechange(7, "front");
+                    x2 += (int) distancechange(7, "front");
                 }
                 if (id == 3) {
-                    y2 += (int) distancechange(7, "frontl");
+                    x2 += (int) distancechange(7, "frontl");
                 }
-                y = x2;
-                x = y2;
+                x = x2;
+                y = y2;
             }
         }
         return new Pose2d(x, y, Math.toRadians(angle));
@@ -2303,17 +2305,17 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                 telemetry.addData("Select Parking Position using AB on Logitech on gamepad 1 and 2:","");
                 telemetry.addData("    Code parks near the middle   ", "(B)");
                 telemetry.addData("    Code parks near the wall ", "(A)");
-                if(gamepad1.x && gamepad2.x){
+                if(gamepad1.x){
                     xyy = 2;
                 }
 
-                if(gamepad1.y && gamepad2.y){
+                if(gamepad1.y){
                     yyy = 2;
                 }
-                if(gamepad1.a && gamepad2.a){
+                if(gamepad1.a){
                     ayy = 2;
                 }
-                if(gamepad1.b && gamepad2.b){
+                if(gamepad1.b ){
                     byy = 2;
                 }
                 if (byy == 2 && !gamepad1.b){
@@ -2392,7 +2394,7 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                 startPosition = START_POSITION.RED_NEAR;
                 break;
             }
-            if(gamepad1.right_bumper && gamepad1.left_bumper && gamepad2.left_bumper && gamepad2.right_bumper){
+            if(gamepad2.left_bumper && gamepad2.right_bumper){
                 telemetry.clearAll();
                 ayy = 1;
                 byy = 1;

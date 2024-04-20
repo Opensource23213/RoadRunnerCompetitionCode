@@ -255,10 +255,13 @@ public class TyneyCompetitionCode extends LinearOpMode {
             if(gamepad2.ps){
                 if(gamepad2.left_trigger > .4){
                     topose = 4;
+                    flippydoo = .475;
                 }else {
                     topose = 3;
+                    flippydoo = .475;
                 }
             }
+            double arm;
 
             armAngle = ArmPos.getCurrentPosition() / ticks - 22;
 
@@ -270,11 +273,17 @@ public class TyneyCompetitionCode extends LinearOpMode {
             double yaw = gamepad1.right_stick_x / (gamepad1.left_trigger + 1);
 
             // joysticks on gamepad2 for arm
-            double arm = gamepad2.left_stick_y/1.5; //power reduced to 25%
+            if (gamepad2.dpad_up){
+                arm = -.15; //power reduced to 25%
+            }else if(gamepad2.dpad_down){
+                arm = .15;
+            }else {
+                arm = gamepad2.left_stick_y / 1.5; //power reduced to 25%
+            }
             double elbow = gamepad2.right_stick_y;
 
             // Eliminate stick drift
-            if (gamepad2.left_stick_y < .05 && gamepad2.left_stick_y > -.05) {
+            if (gamepad2.left_stick_y < .05 && gamepad2.left_stick_y > -.05 && !gamepad2.dpad_up && !gamepad2.dpad_down) {
                 arm = 0;
             }
 
@@ -330,12 +339,14 @@ public class TyneyCompetitionCode extends LinearOpMode {
                     mustaches.setPosition(.68);
                     spinny.setPower(1);
                     onegrab2 = 2;
+                    yPress = 2;
                 }else {
                     ilifty.setPosition(.5);
                     flippydoo = .475;
                     mustaches.setPosition(.28);
                     spinny.setPower(1);
                     onegrab2 = 1;
+                    yPress = 1;
                 }
                 onegrab = 1;
             }
@@ -373,30 +384,34 @@ public class TyneyCompetitionCode extends LinearOpMode {
                 spinny.setPower(1);
                 flippydoo = .475;
                 if (hey == 1){
-                    if(yPress == 1){
+                    if(yPress == 1 || onegrab2 == 1){
                         ilifty.setPosition(.3);
                         mustaches.setPosition(.68);
                         yPress = 2;
                         hey = 2;
                         timer.reset();
+                        count = 1;
                         rude = 2;
-                    }else{
+                        onegrab2 = 2;
+                    }
+                    else{
                         mustaches.setPosition(.42);
                         count = 2;
                         yPress = 1;
                         hey = 2;
+                        onegrab2 = 1;
                     }
                 }
             }
-            if (rude == 2 && Intakepix && timer.time() > .5){
+            /*if (rude == 2 && Intakepix && timer.time() > .5){
                 mustaches.setPosition(.28);
                 ilifty.setPosition(.5);
                 yPress = 1;
                 rude = 1;
-            }
-            if (count >= 2 && count <= 25){
+            }*/
+            if (count >= 2 && count <= 13){
                 count += 1;
-            }else if(count >= 26){ // Code for the other stage of the mustaches closing and intake coming down
+            }else if(count >= 13/*26*/){ // Code for the other stage of the mustaches closing and intake coming down
                 mustaches.setPosition(.28);
                 ilifty.setPosition(.5);
                 count = 1;
@@ -732,6 +747,8 @@ public class TyneyCompetitionCode extends LinearOpMode {
                     ymove = 1;
                     ypress = 1;
                     apress = 2;
+                    serPosition = 0;
+                    wristy.setPosition(wristOut * mult);
                     position = 3;
                 }
             }
@@ -816,6 +833,7 @@ public class TyneyCompetitionCode extends LinearOpMode {
             }
             if (ypress != 3 && xpress >= 2) { // where the wrist stays if it isn't at "a" or "y"
                 wristy.setPosition((float) ((float) .67 * mult));
+
             }
             if (end == 2){ // Speeds up arm for hang
                 arm *= 1.5;
@@ -843,8 +861,8 @@ public class TyneyCompetitionCode extends LinearOpMode {
                         position = armAngle;
                     }
                     else{
-                        Arm1.setPower(0);
-                        Arm2.setPower(0);
+                        Arm1.setPower(arm);
+                        Arm2.setPower(arm);
 
                     }
                 } else if(topose == 2){ // Arm move to position code
@@ -852,8 +870,6 @@ public class TyneyCompetitionCode extends LinearOpMode {
                         Arm1.setPower(0);
                         Arm2.setPower(0);
                         if (apress == 2) {
-                            serPosition = 0;
-                            wristy.setPosition(wristOut * mult);
                             apress = 3;
                         }
                         if(end == 1 || end == 2 && gamepad2.left_stick_y > .2 || end == 2 && gamepad2.left_stick_y < -.2) {
@@ -872,12 +888,12 @@ public class TyneyCompetitionCode extends LinearOpMode {
 
                     } else if (position > armAngle + 11 || position < armAngle - 11) {//  Far and fast arm move into position within an infinite range
                         if (position < armAngle) {
-                            Arm1.setPower(1);
-                            Arm2.setPower(1);
+                            Arm1.setPower(.95);
+                            Arm2.setPower(.95);
                         }
                         if (position > armAngle) {
-                            Arm1.setPower(-1);
-                            Arm2.setPower(-1);
+                            Arm1.setPower(-.95);
+                            Arm2.setPower(-.95);
                         }
                         if (ypress == 2) {
                             grabby.setPosition(grabOut2);
