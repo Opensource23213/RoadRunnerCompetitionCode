@@ -35,8 +35,8 @@ import java.util.List;
  * FFTCOpenSourceAutonomouss Example for only vision detection using tensorflow and park
  */
 
-@Autonomous(name = "FTCOpenSourceAutonomousWorkswithmeep", group = "00-Autonomous", preselectTeleOp = "BucDays")
-public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
+@Autonomous(name = "FTCOpenSourceAutonomousBuc", group = "00-Autonomous", preselectTeleOp = "BucDays")
+public class FTCOpenSourceAutonomousBuc extends LinearOpMode {
 
     public static String TEAM_NAME = "Open Source Robotics";
     public static int TEAM_NUMBER = 23213;
@@ -62,8 +62,6 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
     private Servo ilifty;
     private DistanceSensor sensorDistance;
     private DistanceSensor sensorDistance2;
-    private DistanceSensor sensorDistancer;
-    private DistanceSensor sensorDistancel;
     private DistanceSensor flippydis;
     private DcMotor front_left = null;
     private DcMotor front_right = null;
@@ -123,8 +121,6 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
         ilifty = hardwareMap.get(Servo.class, "lifty2");
         sensorDistance = hardwareMap.get(DistanceSensor.class, "sensorDistance");
         sensorDistance2 = hardwareMap.get(DistanceSensor.class, "sensorDistance2");
-        sensorDistancel = hardwareMap.get(DistanceSensor.class, "dis_left");
-        sensorDistancer = hardwareMap.get(DistanceSensor.class, "dis_right");
         flippydis = hardwareMap.get(DistanceSensor.class, "flippydis");
         Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor) sensorDistance;
         Rev2mDistanceSensor sensorTimeOfFlight2 = (Rev2mDistanceSensor) sensorDistance2;
@@ -141,8 +137,8 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
         initDoubleVision();
         myVisionPortal.setProcessorEnabled(aprilTag, false);
         myVisionPortal.setProcessorEnabled(tfod, true);
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.DOWN;
-        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
         // Initialize the IMU with this mounting orientation
@@ -194,6 +190,7 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
         double serAdjust = -7;
 
         double stop = selectStartingPosition();
+        grabby.setDirection(Servo.Direction.REVERSE);
         if (startPosition == START_POSITION.BLUE_NEAR || startPosition == START_POSITION.RED_NEAR){
             grabby.setPosition(.6);
         }else {
@@ -236,7 +233,7 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
             elbow1.setPosition(.91);
             double grabIn = 1;
             float wristIn = (float) ((float) .6 + serAdjust/355);
-            grabby.setDirection(Servo.Direction.REVERSE);
+
             if (startPosition == START_POSITION.BLUE_NEAR || startPosition == START_POSITION.RED_NEAR){
                 grabby.setPosition(.6);
             }else {
@@ -270,8 +267,8 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                         drive.followTrajectorySequence(traj1);
                                         grabby.setPosition(.97);
                                         traj2 = drive.trajectorySequenceBuilder(traj1.end())
-                                                .lineToLinearHeading(new Pose2d(41, 37, Math.toRadians(0)))
-                                                .addTemporalMarker(.5, () -> {
+                                                .lineToLinearHeading(new Pose2d(41, 44, Math.toRadians(0)))
+                                                .addTemporalMarker(.3, () -> {
                                                     b();
                                                 })
                                                 .splineToSplineHeading(new Pose2d(21, 40, Math.toRadians(-90)), Math.toRadians(180))
@@ -279,69 +276,74 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                         drive.followTrajectorySequence(traj2);
                                         release();
                                         safeWaitSeconds(.2);
-                                        /*traj8 = drive.trajectorySequenceBuilder(traj2.end())
-                                                .lineToConstantHeading(new Vector2d(19, -45))
-                                                .lineToLinearHeading(new Pose2d(20, -62, Math.toRadians(180)))
-                                                .splineToConstantHeading(new Vector2d(-35, -62), Math.toRadians(180))
-                                                .splineToConstantHeading(new Vector2d(-61, -42), Math.toRadians(180))
-                                                .build();
-
-
-
-                                        drive.followTrajectorySequence(traj8);
-                                        stack1();
-                                        safeWaitSeconds(.2);
-                                        stack2();
-                                        in();
-                                        traj7 = drive.trajectorySequenceBuilder(traj8.end())
-                                                .lineToLinearHeading(new Pose2d(-35, -59, Math.toRadians(180)))
-                                                .addTemporalMarker(1.2, () -> {
-                                                    stopp();
+                                        traj3 = drive.trajectorySequenceBuilder(traj2.end())
+                                                .lineToLinearHeading(new Pose2d(21, 47, Math.toRadians(-90)))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                    mustaches.setPosition(.28);
                                                 })
-                                                .splineToConstantHeading(new Vector2d(9, -59), Math.toRadians(0))
+                                                .lineToLinearHeading(new Pose2d(12, 60, Math.toRadians(180)))
+
+                                                .lineToConstantHeading(new Vector2d(-57, 60))
+
+                                                .lineToConstantHeading(new Vector2d(-57, 35))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                    mustaches.setPosition(.68);
+                                                })
+                                                .lineToLinearHeading(new Pose2d(-62, 35, Math.toRadians(180)))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                    spinny.setPower(1);
+                                                    mustaches.setPosition(.42);
+                                                    ilifty.setPosition(.3);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(-.09, () -> {
+                                                    sleep(3000);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
+                                                    mustaches.setPosition(.28);
+                                                    ilifty.setPosition(.5);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(2.5, () -> {
+                                                    spinny.setPower(0);
+                                                    ilifty.setPosition(.5);
+                                                    flippy.setPosition(.18);
+                                                    double flipdis = flippydis.getDistance(DistanceUnit.INCH);
+                                                    telemetry.addData("flippydis: ", flipdis);
+                                                    telemetry.update();
+                                                    grabby.setPosition(.97);
+                                                    wristy.setPosition((float) (float) .67 * .22);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(2.85, () -> {
+                                                    elbow1.setPosition(1);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(3.35, () -> {
+                                                    grabby.setPosition(.6);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(3.5, () -> {
+                                                    flippy.setPosition(.5);
+                                                    elbow1.setPosition(.91);
+                                                })
+                                                .lineToLinearHeading(new Pose2d(-50, 60, Math.toRadians(0)))
+                                                .splineToConstantHeading(new Vector2d(12, 60), Math.toRadians(0))
+                                                .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
+                                                    armpose(0);
+                                                    elbow1.setPosition(0);
+                                                    wristy.setPosition(((68 + 0 * 1.4 + 2 * 1.4) / 355) * .22);
+                                                })
+                                                .splineToConstantHeading(new Vector2d(48, 38), Math.toRadians(0))
+
+
                                                 .build();
-                                        drive.followTrajectorySequence(traj7);
-                                        if (twopix()) {
-                                            pick();
-                                            traj7 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .splineToConstantHeading(new Vector2d(12, -59), Math.toRadians(0))
-                                                    .addTemporalMarker(.8, () -> {
-                                                        armout(2);
-                                                    })
-                                                    .splineToSplineHeading(new Pose2d(36, -59, Math.toRadians(1)), Math.toRadians(0))
-                                                    .splineToConstantHeading(new Vector2d(49, -37), Math.toRadians(0))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj7);
-                                            if (twopix()) {
-                                                b();
-                                                safeWaitSeconds(1.2);
-                                                pick();
-                                                armout(2);
-                                                safeWaitSeconds(1);
-                                            }
-                                            drop("frontl", "red", pix);
-                                            traj13 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .lineToConstantHeading(new Vector2d(46, -63))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj13);
-                                        } else {
-                                            traj7 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .lineToConstantHeading(new Vector2d(55, -59))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj7);
-                                            release();*/
+                                        drive.followTrajectorySequence(traj3);
+                                        drop("frontr", "red", 99);
                                         if(parkPosition == THRU.WALL) {
-                                            traj13 = drive.trajectorySequenceBuilder(traj2.end())
-                                                    .lineToConstantHeading(new Vector2d(19, 45))
-                                                    .lineToLinearHeading(new Pose2d(60, 63, Math.toRadians(180)))
+                                            traj13 = drive.trajectorySequenceBuilder(traj3.end())
+                                                    .splineToConstantHeading(new Vector2d(44, 44), Math.toRadians(0))
+                                                    .splineToConstantHeading(new Vector2d(44, 66), Math.toRadians(0))
                                                     .build();
                                             drive.followTrajectorySequence(traj13);
                                         }else{
-                                            traj7 = drive.trajectorySequenceBuilder(traj2.end())
-                                                    .lineToConstantHeading(new Vector2d(19, 45))
-                                                    .splineToConstantHeading(new Vector2d(40, 45), 0)
-                                                    .splineToConstantHeading(new Vector2d(40, 15), 0)
-                                                    .splineToSplineHeading(new Pose2d(60, 10, Math.toRadians(180)), 0)
+                                            traj7 = drive.trajectorySequenceBuilder(traj3.end())
+                                                    .lineToLinearHeading(new Pose2d(60, 10, Math.toRadians(180)))
                                                     .build();
 
                                             drive.followTrajectorySequence(traj7);
@@ -371,66 +373,72 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                                 .build();
                                         drive.followTrajectorySequence(traj2);
                                         release();
-                                        safeWaitSeconds(.2);/*
-                                        traj8 = drive.trajectorySequenceBuilder(traj2.end())
-                                                .lineToConstantHeading(new Vector2d(12, -38))
-                                                .lineToLinearHeading(new Pose2d(20, -60, Math.toRadians(180)))
-                                                .splineToConstantHeading(new Vector2d(-35, -60), Math.toRadians(180))
-                                                .splineToConstantHeading(new Vector2d(-61, -36), Math.toRadians(180))
-                                                .build();
-                                        drive.followTrajectorySequence(traj8);
-                                        stack1();
                                         safeWaitSeconds(.2);
-                                        stack2();
-                                        in();
-                                        traj7 = drive.trajectorySequenceBuilder(traj8.end())
-                                                .lineToLinearHeading(new Pose2d(-45, -56, Math.toRadians(180)))
-                                                .addTemporalMarker(1.2, () -> {
-                                                    stopp();
+                                        traj3 = drive.trajectorySequenceBuilder(traj2.end())
+                                                .lineToConstantHeading(new Vector2d(12, 39.5))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                    mustaches.setPosition(.28);
                                                 })
-                                                .splineToConstantHeading(new Vector2d(9, -56), Math.toRadians(0))
+                                                .lineToLinearHeading(new Pose2d(20, 60, Math.toRadians(180)))
+                                                .lineToConstantHeading(new Vector2d(-57, 60))
+
+                                                .lineToConstantHeading(new Vector2d(-57, 35))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                   mustaches.setPosition(.68);
+                                                })
+                                                .lineToLinearHeading(new Pose2d(-62, 35, Math.toRadians(180)))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                    spinny.setPower(1);
+                                                    mustaches.setPosition(.42);
+                                                    ilifty.setPosition(.3);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(-.09, () -> {
+                                                    sleep(3000);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
+                                                    mustaches.setPosition(.28);
+                                                    ilifty.setPosition(.5);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(2.5, () -> {
+                                                    spinny.setPower(0);
+                                                    ilifty.setPosition(.5);
+                                                    flippy.setPosition(.18);
+                                                    double flipdis = flippydis.getDistance(DistanceUnit.INCH);
+                                                    telemetry.addData("flippydis: ", flipdis);
+                                                    telemetry.update();
+                                                    grabby.setPosition(.97);
+                                                    wristy.setPosition((float) (float) .67 * .22);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(2.85, () -> {
+                                                    elbow1.setPosition(1);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(3.35, () -> {
+                                                    grabby.setPosition(.6);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(3.5, () -> {
+                                                    flippy.setPosition(.5);
+                                                    elbow1.setPosition(.91);
+                                                })
+                                                .lineToLinearHeading(new Pose2d(-50, 60, Math.toRadians(0)))
+                                                .splineToConstantHeading(new Vector2d(12, 60), Math.toRadians(0))
+                                                .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
+                                                    armpose(0);
+                                                    elbow1.setPosition(0);
+                                                    wristy.setPosition(((68 + 0 * 1.4 + 2 * 1.4) / 355) * .22);
+                                                })
+                                                .splineToConstantHeading(new Vector2d(48, 43), Math.toRadians(0))
                                                 .build();
-                                        drive.followTrajectorySequence(traj7);
-                                        if (twopix()) {
-                                            pick();
-                                            traj7 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .splineToConstantHeading(new Vector2d(12, -59), Math.toRadians(0))
-                                                    .addTemporalMarker(.8, () -> {
-                                                        armout(2);
-                                                    })
-                                                    .splineToSplineHeading(new Pose2d(36, -59, Math.toRadians(1)), Math.toRadians(0))
-                                                    .splineToConstantHeading(new Vector2d(49, -37), Math.toRadians(0))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj7);
-                                            if (twopix()) {
-                                                b();
-                                                safeWaitSeconds(1.2);
-                                                pick();
-                                                armout(2);
-                                                safeWaitSeconds(1);
-                                            }
-                                            drop("frontl", "red", pix);
-                                            traj13 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .lineToConstantHeading(new Vector2d(46, -63))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj13);
-                                        } else {
-                                            traj7 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .lineToConstantHeading(new Vector2d(55, -59))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj7);
-                                            release();*/
-                                        if (parkPosition == THRU.WALL) {
-                                            traj13 = drive.trajectorySequenceBuilder(traj2.end())
-                                                    .lineToConstantHeading(new Vector2d(12, 38))
-                                                    .lineToLinearHeading(new Pose2d(60, 63, Math.toRadians(180)))
+                                        drive.followTrajectorySequence(traj3);
+                                        drop("frontr", "red", 99);
+                                        if(parkPosition == THRU.WALL) {
+                                            traj13 = drive.trajectorySequenceBuilder(traj3.end())
+                                                    .splineToConstantHeading(new Vector2d(44, 43), Math.toRadians(0))
+                                                    .splineToConstantHeading(new Vector2d(44, 64), Math.toRadians(0))
                                                     .build();
                                             drive.followTrajectorySequence(traj13);
                                         }else{
-                                            traj7 = drive.trajectorySequenceBuilder(traj2.end())
-                                                    .lineToConstantHeading(new Vector2d(12, 38))
-                                                    .splineToConstantHeading(new Vector2d(20, 38), 0)
-                                                    .splineToSplineHeading(new Pose2d(60, 10, Math.toRadians(180)), Math.toRadians(0))
+                                            traj7 = drive.trajectorySequenceBuilder(traj3.end())
+                                                    .lineToLinearHeading(new Pose2d(60, 10, Math.toRadians(180)))
                                                     .build();
 
                                             drive.followTrajectorySequence(traj7);
@@ -459,68 +467,72 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                                 .build();
                                         drive.followTrajectorySequence(traj2);
                                         release();
-                                        safeWaitSeconds(.2);/*
-                                        traj8 = drive.trajectorySequenceBuilder(traj2.end())
-                                                .splineToConstantHeading(new Vector2d(16, -33), 0)
-                                                .splineToConstantHeading(new Vector2d(20, -60), Math.toRadians(180))
-                                                .splineToConstantHeading(new Vector2d(-35, -60), Math.toRadians(180))
-                                                .splineToConstantHeading(new Vector2d(-62, -42), Math.toRadians(180))
-                                                .build();
-                                        drive.followTrajectorySequence(traj8);
-                                        stack1();
                                         safeWaitSeconds(.2);
-                                        stack2();
-                                        in();
-                                        traj7 = drive.trajectorySequenceBuilder(traj8.end())
-                                                .lineToLinearHeading(new Pose2d(-35, -61, Math.toRadians(180)))
-                                                .addTemporalMarker(1.2, () -> {
-                                                    stopp();
+                                       traj3 = drive.trajectorySequenceBuilder(traj2.end())
+                                                .lineToConstantHeading(new Vector2d(21, 32))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                    mustaches.setPosition(.28);
                                                 })
-                                                .splineToConstantHeading(new Vector2d(9, -59), Math.toRadians(0))
+                                                .lineToConstantHeading(new Vector2d(12, 59))
+                                                .lineToConstantHeading(new Vector2d(-57, 58))
+
+                                                .lineToConstantHeading(new Vector2d(-57, 32))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                   mustaches.setPosition(.68);
+                                                })
+                                                .lineToLinearHeading(new Pose2d(-62, 32 , Math.toRadians(180)))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                    spinny.setPower(1);
+                                                    mustaches.setPosition(.42);
+                                                    ilifty.setPosition(.3);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(-.09, () -> {
+                                                    sleep(3000);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
+                                                    mustaches.setPosition(.28);
+                                                    ilifty.setPosition(.5);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(2.5, () -> {
+                                                    spinny.setPower(0);
+                                                    ilifty.setPosition(.5);
+                                                    flippy.setPosition(.18);
+                                                    double flipdis = flippydis.getDistance(DistanceUnit.INCH);
+                                                    telemetry.addData("flippydis: ", flipdis);
+                                                    telemetry.update();
+                                                    grabby.setPosition(.97);
+                                                    wristy.setPosition((float) (float) .67 * .22);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(2.85, () -> {
+                                                    elbow1.setPosition(1);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(3.35, () -> {
+                                                    grabby.setPosition(.6);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(3.5, () -> {
+                                                    flippy.setPosition(.5);
+                                                    elbow1.setPosition(.91);
+                                                })
+                                                .lineToLinearHeading(new Pose2d(-50, 60, Math.toRadians(0)))
+                                                .splineToConstantHeading(new Vector2d(12, 60), Math.toRadians(0))
+                                                .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
+                                                    armpose(0);
+                                                    elbow1.setPosition(0);
+                                                    wristy.setPosition(((68 + 0 * 1.4 + 2 * 1.4) / 355) * .22);
+                                                })
+                                                .splineToConstantHeading(new Vector2d(48, 43), Math.toRadians(0))
                                                 .build();
-                                        drive.followTrajectorySequence(traj7);
-                                        if (twopix()) {
-                                            pick();
-
-                                            traj7 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .splineToConstantHeading(new Vector2d(12, -59), Math.toRadians(0))
-                                                    .addTemporalMarker(.8, () -> {
-                                                        armout(2);
-                                                    })
-                                                    .splineToSplineHeading(new Pose2d(36, -59, Math.toRadians(1)), Math.toRadians(0))
-                                                    .splineToConstantHeading(new Vector2d(49, -37), Math.toRadians(0))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj7);
-                                            if (twopix()) {
-                                                b();
-                                                safeWaitSeconds(1.2);
-                                                pick();
-                                                armout(2);
-                                                safeWaitSeconds(1);
-                                            }
-                                            drop("frontl", "red", pix);
-                                            traj13 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .lineToConstantHeading(new Vector2d(46, -63))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj13);
-
-                                        } else {
-                                            traj7 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .lineToConstantHeading(new Vector2d(55, -59))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj7);
-                                            release();*/
-                                        if (parkPosition == THRU.WALL) {
-                                            traj13 = drive.trajectorySequenceBuilder(traj2.end())
-                                                    .lineToConstantHeading(new Vector2d(12, 32))
-                                                    .lineToConstantHeading(new Vector2d(60, 63))
+                                        drive.followTrajectorySequence(traj3);
+                                        drop("frontr", "red", 99);
+                                        if(parkPosition == THRU.WALL) {
+                                            traj13 = drive.trajectorySequenceBuilder(traj3.end())
+                                                    .splineToConstantHeading(new Vector2d(44, 43), Math.toRadians(0))
+                                                    .splineToConstantHeading(new Vector2d(44, 64), Math.toRadians(0))
                                                     .build();
                                             drive.followTrajectorySequence(traj13);
                                         }else{
-                                            traj7 = drive.trajectorySequenceBuilder(traj2.end())
-                                                    .lineToConstantHeading(new Vector2d(12, 32))
-                                                    .splineToConstantHeading(new Vector2d(20, 32), Math.toRadians(0))
-                                                    .splineToConstantHeading(new Vector2d(60, 10), Math.toRadians(0))
+                                            traj7 = drive.trajectorySequenceBuilder(traj3.end())
+                                                    .lineToLinearHeading(new Pose2d(60, 10, Math.toRadians(180)))
                                                     .build();
 
                                             drive.followTrajectorySequence(traj7);
@@ -544,8 +556,8 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                         drive.followTrajectorySequence(traj1);
                                         grabby.setPosition(.97);
                                         traj2 = drive.trajectorySequenceBuilder(traj1.end())
-                                                .lineToLinearHeading(new Pose2d(41, -37, Math.toRadians(0)))
-                                                .addTemporalMarker(.5, () -> {
+                                                .lineToLinearHeading(new Pose2d(41, -44, Math.toRadians(0)))
+                                                .addTemporalMarker(.3, () -> {
                                                     b();
                                                 })
                                                 .splineToSplineHeading(new Pose2d(21, -40, Math.toRadians(90)), Math.toRadians(180))
@@ -553,71 +565,76 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                         drive.followTrajectorySequence(traj2);
                                         release();
                                         safeWaitSeconds(.2);
-                                        /*traj8 = drive.trajectorySequenceBuilder(traj2.end())
-                                                .lineToConstantHeading(new Vector2d(19, -45))
-                                                .lineToLinearHeading(new Pose2d(20, -62, Math.toRadians(180)))
-                                                .splineToConstantHeading(new Vector2d(-35, -62), Math.toRadians(180))
-                                                .splineToConstantHeading(new Vector2d(-61, -42), Math.toRadians(180))
-                                                .build();
-
-
-
-                                        drive.followTrajectorySequence(traj8);
-                                        stack1();
-                                        safeWaitSeconds(.2);
-                                        stack2();
-                                        in();
-                                        traj7 = drive.trajectorySequenceBuilder(traj8.end())
-                                                .lineToLinearHeading(new Pose2d(-35, -59, Math.toRadians(180)))
-                                                .addTemporalMarker(1.2, () -> {
-                                                    stopp();
+                                        traj3 = drive.trajectorySequenceBuilder(traj2.end())
+                                                .lineToLinearHeading(new Pose2d(21, -47, Math.toRadians(90)))
+                                                .lineToLinearHeading(new Pose2d(12, -60, Math.toRadians(180)))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                    mustaches.setPosition(.28);
                                                 })
-                                                .splineToConstantHeading(new Vector2d(9, -59), Math.toRadians(0))
+                                                .lineToConstantHeading(new Vector2d(-55, -60))
+
+                                                .lineToConstantHeading(new Vector2d(-55, -35))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                    mustaches.setPosition(.68);
+                                                })
+                                                .lineToLinearHeading(new Pose2d(-62, -35, Math.toRadians(180)))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                    spinny.setPower(1);
+                                                    mustaches.setPosition(.42);
+                                                    ilifty.setPosition(.3);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(-.09, () -> {
+                                                    sleep(3000);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
+                                                    mustaches.setPosition(.28);
+                                                    ilifty.setPosition(.5);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(2.5, () -> {
+                                                    spinny.setPower(0);
+                                                    ilifty.setPosition(.5);
+                                                    flippy.setPosition(.18);
+                                                    double flipdis = flippydis.getDistance(DistanceUnit.INCH);
+                                                    telemetry.addData("flippydis: ", flipdis);
+                                                    telemetry.update();
+                                                    grabby.setPosition(.97);
+                                                    wristy.setPosition((float) (float) .67 * .22);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(2.85, () -> {
+                                                    elbow1.setPosition(1);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(3.35, () -> {
+                                                    grabby.setPosition(.6);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(3.5, () -> {
+                                                    flippy.setPosition(.5);
+                                                    elbow1.setPosition(.91);
+                                                })
+                                                .lineToLinearHeading(new Pose2d(-50, -60, Math.toRadians(0.0001)))
+                                                .splineToConstantHeading(new Vector2d(20, -60), Math.toRadians(0))
+                                                .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
+                                                    armpose(0);
+                                                    elbow1.setPosition(0);
+                                                    wristy.setPosition(((68 + 0 * 1.4 + 2 * 1.4) / 355) * .22);
+                                                })
+                                                .splineToConstantHeading(new Vector2d(48, -37), Math.toRadians(0))
+
+
                                                 .build();
-                                        drive.followTrajectorySequence(traj7);
-                                        if (twopix()) {
-                                            pick();
-                                            traj7 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .splineToConstantHeading(new Vector2d(12, -59), Math.toRadians(0))
-                                                    .addTemporalMarker(.8, () -> {
-                                                        armout(2);
-                                                    })
-                                                    .splineToSplineHeading(new Pose2d(36, -59, Math.toRadians(1)), Math.toRadians(0))
-                                                    .splineToConstantHeading(new Vector2d(49, -37), Math.toRadians(0))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj7);
-                                            if (twopix()) {
-                                                b();
-                                                safeWaitSeconds(1.2);
-                                                pick();
-                                                armout(2);
-                                                safeWaitSeconds(1);
-                                            }
-                                            drop("frontl", "red", pix);
-                                            traj13 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .lineToConstantHeading(new Vector2d(46, -63))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj13);
-                                        } else {
-                                            traj7 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .lineToConstantHeading(new Vector2d(55, -59))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj7);
-                                            release();*/
+                                        drive.followTrajectorySequence(traj3);
+                                        drop("frontr", "red", 99);
                                         if(parkPosition == THRU.WALL) {
-                                            traj13 = drive.trajectorySequenceBuilder(traj2.end())
-                                                    .lineToConstantHeading(new Vector2d(19, -45))
-                                                    .lineToLinearHeading(new Pose2d(60, -63, Math.toRadians(180)))
+                                            traj13 = drive.trajectorySequenceBuilder(traj3.end())
+                                                    .splineToConstantHeading(new Vector2d(44, -43), Math.toRadians(0))
+                                                    .splineToConstantHeading(new Vector2d(44, -62), Math.toRadians(0))
                                                     .build();
                                             drive.followTrajectorySequence(traj13);
                                         }else{
-                                            traj13 = drive.trajectorySequenceBuilder(traj2.end())
-                                                    .lineToConstantHeading(new Vector2d(19, -45))
-                                                    .splineToConstantHeading(new Vector2d(40, -45), 0)
-                                                    .splineToConstantHeading(new Vector2d(40, -10), 0)
-                                                    .splineToSplineHeading(new Pose2d(60, -10, Math.toRadians(180)), 0)
+                                            traj7 = drive.trajectorySequenceBuilder(traj3.end())
+                                                    .lineToLinearHeading(new Pose2d(60, -10, Math.toRadians(180)))
                                                     .build();
-                                            drive.followTrajectorySequence(traj13);
+
+                                            drive.followTrajectorySequence(traj7);
                                         }
                                         mustaches.setPosition(.28);
                                         safeWaitSeconds(1);
@@ -644,68 +661,75 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                                 .build();
                                         drive.followTrajectorySequence(traj2);
                                         release();
-                                        safeWaitSeconds(.2);/*
-                                        traj8 = drive.trajectorySequenceBuilder(traj2.end())
-                                                .lineToConstantHeading(new Vector2d(12, -38))
-                                                .lineToLinearHeading(new Pose2d(20, -60, Math.toRadians(180)))
-                                                .splineToConstantHeading(new Vector2d(-35, -60), Math.toRadians(180))
-                                                .splineToConstantHeading(new Vector2d(-61, -36), Math.toRadians(180))
-                                                .build();
-                                        drive.followTrajectorySequence(traj8);
-                                        stack1();
                                         safeWaitSeconds(.2);
-                                        stack2();
-                                        in();
-                                        traj7 = drive.trajectorySequenceBuilder(traj8.end())
-                                                .lineToLinearHeading(new Pose2d(-45, -56, Math.toRadians(180)))
-                                                .addTemporalMarker(1.2, () -> {
-                                                    stopp();
+                                        traj3 = drive.trajectorySequenceBuilder(traj2.end())
+                                                .lineToConstantHeading(new Vector2d(12, -39.5))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                    mustaches.setPosition(.28);
                                                 })
-                                                .splineToConstantHeading(new Vector2d(9, -56), Math.toRadians(0))
+                                                .lineToLinearHeading(new Pose2d(20, -60, Math.toRadians(180)))
+                                                .lineToConstantHeading(new Vector2d(-55, -60))
+
+                                                .lineToConstantHeading(new Vector2d(-55, -35))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                    mustaches.setPosition(.68);
+                                                })
+                                                .lineToLinearHeading(new Pose2d(-62, -35, Math.toRadians(180)))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                    spinny.setPower(1);
+                                                    mustaches.setPosition(.42);
+                                                    ilifty.setPosition(.3);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(-.09, () -> {
+                                                    sleep(3000);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
+                                                    mustaches.setPosition(.28);
+                                                    ilifty.setPosition(.5);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(2.5, () -> {
+                                                    spinny.setPower(0);
+                                                    ilifty.setPosition(.5);
+                                                    flippy.setPosition(.18);
+                                                    double flipdis = flippydis.getDistance(DistanceUnit.INCH);
+                                                    telemetry.addData("flippydis: ", flipdis);
+                                                    telemetry.update();
+                                                    grabby.setPosition(.97);
+                                                    wristy.setPosition((float) (float) .67 * .22);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(2.85, () -> {
+                                                    elbow1.setPosition(1);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(3.35, () -> {
+                                                    grabby.setPosition(.6);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(3.5, () -> {
+                                                    flippy.setPosition(.5);
+                                                    elbow1.setPosition(.91);
+                                                })
+                                                .lineToLinearHeading(new Pose2d(-50, -60, Math.toRadians(0.0001)))
+                                                .splineToConstantHeading(new Vector2d(12, -60), Math.toRadians(0))
+                                                .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
+                                                    armpose(0);
+                                                    elbow1.setPosition(0);
+                                                    wristy.setPosition(((68 + 0 * 1.4 + 2 * 1.4) / 355) * .22);
+                                                })
+                                                .splineToConstantHeading(new Vector2d(48, -37), Math.toRadians(0))
                                                 .build();
-                                        drive.followTrajectorySequence(traj7);
-                                        if (twopix()) {
-                                            pick();
-                                            traj7 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .splineToConstantHeading(new Vector2d(12, -59), Math.toRadians(0))
-                                                    .addTemporalMarker(.8, () -> {
-                                                        armout(2);
-                                                    })
-                                                    .splineToSplineHeading(new Pose2d(36, -59, Math.toRadians(1)), Math.toRadians(0))
-                                                    .splineToConstantHeading(new Vector2d(49, -37), Math.toRadians(0))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj7);
-                                            if (twopix()) {
-                                                b();
-                                                safeWaitSeconds(1.2);
-                                                pick();
-                                                armout(2);
-                                                safeWaitSeconds(1);
-                                            }
-                                            drop("frontl", "red", pix);
-                                            traj13 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .lineToConstantHeading(new Vector2d(46, -63))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj13);
-                                        } else {
-                                            traj7 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .lineToConstantHeading(new Vector2d(55, -59))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj7);
-                                            release();*/
+                                        drive.followTrajectorySequence(traj3);
+                                        drop("frontr", "red", 99);
                                         if(parkPosition == THRU.WALL) {
-                                            traj13 = drive.trajectorySequenceBuilder(traj2.end())
-                                                    .lineToConstantHeading(new Vector2d(12, -38))
-                                                    .lineToLinearHeading(new Pose2d(60, -63, Math.toRadians(180)))
+                                            traj13 = drive.trajectorySequenceBuilder(traj3.end())
+                                                    .splineToConstantHeading(new Vector2d(44, -43), Math.toRadians(0))
+                                                    .splineToConstantHeading(new Vector2d(44, -64), Math.toRadians(0))
                                                     .build();
                                             drive.followTrajectorySequence(traj13);
                                         }else{
-                                            traj13 = drive.trajectorySequenceBuilder(traj2.end())
-                                                    .lineToConstantHeading(new Vector2d(12, -38))
-                                                    .splineToConstantHeading(new Vector2d(20, -38), 0)
-                                                    .splineToSplineHeading(new Pose2d(60, -10, Math.toRadians(180)), Math.toRadians(0))
+                                            traj7 = drive.trajectorySequenceBuilder(traj3.end())
+                                                    .lineToLinearHeading(new Pose2d(60, -10, Math.toRadians(180)))
                                                     .build();
-                                            drive.followTrajectorySequence(traj13);
+
+                                            drive.followTrajectorySequence(traj7);
                                         }
                                         mustaches.setPosition(.28);
                                         safeWaitSeconds(1);
@@ -718,83 +742,88 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
                                     case LEFT:
                                         armout(1);
                                         traj1 = drive.trajectorySequenceBuilder(startrn)
-                                                .splineToSplineHeading(new Pose2d(48, -32, Math.toRadians(0)), Math.toRadians(0))
+                                                .splineToSplineHeading(new Pose2d(48, -30, Math.toRadians(0)), Math.toRadians(0))
                                                 .build();
                                         drive.followTrajectorySequence(traj1);
                                         grabby.setPosition(.97);
                                         traj2 = drive.trajectorySequenceBuilder(traj1.end())
-                                                .lineToLinearHeading(new Pose2d(41, -32, Math.toRadians(0)))
+                                                .lineToLinearHeading(new Pose2d(41, -30, Math.toRadians(0)))
                                                 .addTemporalMarker(.5, () -> {
                                                     b();
                                                 })
-                                                .splineToSplineHeading(new Pose2d(8, -35, Math.toRadians(180)), Math.toRadians(180))
+                                                .splineToSplineHeading(new Pose2d(8, -32, Math.toRadians(180)), Math.toRadians(180))
                                                 .build();
                                         drive.followTrajectorySequence(traj2);
                                         release();
-                                        safeWaitSeconds(.2);/*
-                                        traj8 = drive.trajectorySequenceBuilder(traj2.end())
-                                                .splineToConstantHeading(new Vector2d(16, -33), 0)
-                                                .splineToConstantHeading(new Vector2d(20, -60), Math.toRadians(180))
-                                                .splineToConstantHeading(new Vector2d(-35, -60), Math.toRadians(180))
-                                                .splineToConstantHeading(new Vector2d(-62, -42), Math.toRadians(180))
-                                                .build();
-                                        drive.followTrajectorySequence(traj8);
-                                        stack1();
                                         safeWaitSeconds(.2);
-                                        stack2();
-                                        in();
-                                        traj7 = drive.trajectorySequenceBuilder(traj8.end())
-                                                .lineToLinearHeading(new Pose2d(-35, -61, Math.toRadians(180)))
-                                                .addTemporalMarker(1.2, () -> {
-                                                    stopp();
+                                        traj3 = drive.trajectorySequenceBuilder(traj2.end())
+                                                .lineToConstantHeading(new Vector2d(21, -32))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                    mustaches.setPosition(.28);
                                                 })
-                                                .splineToConstantHeading(new Vector2d(9, -59), Math.toRadians(0))
+                                                .lineToConstantHeading(new Vector2d(12, -60))
+                                                .lineToConstantHeading(new Vector2d(-57, -60))
+
+                                                .lineToConstantHeading(new Vector2d(-55, -37))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                    mustaches.setPosition(.68);
+                                                })
+                                                .lineToLinearHeading(new Pose2d(-63, -37, Math.toRadians(180)))
+                                                .UNSTABLE_addTemporalMarkerOffset(-.1, () -> {
+                                                    spinny.setPower(1);
+                                                    mustaches.setPosition(.42);
+                                                    ilifty.setPosition(.3);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(-.09, () -> {
+                                                    sleep(3000);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
+                                                    mustaches.setPosition(.28);
+                                                    ilifty.setPosition(.5);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(2.5, () -> {
+                                                    spinny.setPower(0);
+                                                    ilifty.setPosition(.5);
+                                                    flippy.setPosition(.18);
+                                                    double flipdis = flippydis.getDistance(DistanceUnit.INCH);
+                                                    telemetry.addData("flippydis: ", flipdis);
+                                                    telemetry.update();
+                                                    grabby.setPosition(.97);
+                                                    wristy.setPosition((float) (float) .67 * .22);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(2.85, () -> {
+                                                    elbow1.setPosition(1);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(3.35, () -> {
+                                                    grabby.setPosition(.6);
+                                                })
+                                                .UNSTABLE_addTemporalMarkerOffset(3.5, () -> {
+                                                    flippy.setPosition(.5);
+                                                    elbow1.setPosition(.91);
+                                                })
+                                                .lineToLinearHeading(new Pose2d(-50, -60, Math.toRadians(.0001)))
+                                                .splineToConstantHeading(new Vector2d(12, -60), Math.toRadians(0))
+                                                .UNSTABLE_addTemporalMarkerOffset(.0001, () -> {
+                                                    armpose(0);
+                                                    elbow1.setPosition(0);
+                                                    wristy.setPosition(((68 + 0 * 1.4 + 2 * 1.4) / 355) * .22);
+                                                })
+                                                .splineToConstantHeading(new Vector2d(48, -38), Math.toRadians(0))
                                                 .build();
-                                        drive.followTrajectorySequence(traj7);
-                                        if (twopix()) {
-                                            pick();
-
-                                            traj7 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .splineToConstantHeading(new Vector2d(12, -59), Math.toRadians(0))
-                                                    .addTemporalMarker(.8, () -> {
-                                                        armout(2);
-                                                    })
-                                                    .splineToSplineHeading(new Pose2d(36, -59, Math.toRadians(1)), Math.toRadians(0))
-                                                    .splineToConstantHeading(new Vector2d(49, -37), Math.toRadians(0))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj7);
-                                            if (twopix()) {
-                                                b();
-                                                safeWaitSeconds(1.2);
-                                                pick();
-                                                armout(2);
-                                                safeWaitSeconds(1);
-                                            }
-                                            drop("frontl", "red", pix);
-                                            traj13 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .lineToConstantHeading(new Vector2d(46, -63))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj13);
-
-                                        } else {
-                                            traj7 = drive.trajectorySequenceBuilder(traj7.end())
-                                                    .lineToConstantHeading(new Vector2d(55, -59))
-                                                    .build();
-                                            drive.followTrajectorySequence(traj7);
-                                            release();*/
+                                        drive.followTrajectorySequence(traj3);
+                                        drop("frontr", "red", 99);
                                         if(parkPosition == THRU.WALL) {
-                                            traj13 = drive.trajectorySequenceBuilder(traj2.end())
-                                                    .lineToConstantHeading(new Vector2d(12, -35))
-                                                    .lineToConstantHeading(new Vector2d(60, -63))
+                                            traj13 = drive.trajectorySequenceBuilder(traj3.end())
+                                                    .splineToConstantHeading(new Vector2d(44, -44), Math.toRadians(0))
+                                                    .splineToConstantHeading(new Vector2d(44, -62), Math.toRadians(0))
                                                     .build();
                                             drive.followTrajectorySequence(traj13);
                                         }else{
-                                            traj13 = drive.trajectorySequenceBuilder(traj2.end())
-                                                    .lineToConstantHeading(new Vector2d(12, -35))
-                                                    .splineToConstantHeading(new Vector2d(20, -32), Math.toRadians(0))
-                                                    .splineToConstantHeading(new Vector2d(60, -10), Math.toRadians(0))
+                                            traj7 = drive.trajectorySequenceBuilder(traj3.end())
+                                                    .lineToLinearHeading(new Pose2d(60, -10, Math.toRadians(180)))
                                                     .build();
-                                            drive.followTrajectorySequence(traj13);
+
+                                            drive.followTrajectorySequence(traj7);
                                         }
                                         mustaches.setPosition(.28);
                                         safeWaitSeconds(1);
@@ -1950,7 +1979,10 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
     public void b(){
         elbow1.setPosition(.91);
         wristy.setPosition((float) ((float) .67 * .22));
-        flippy.setPosition(.28);
+        if(startPosition == START_POSITION.BLUE_FAR || startPosition == START_POSITION.RED_FAR){
+            flippy.setPosition(.28);
+        }
+
         armpose(-10);
     }
     public double pick(){
@@ -2102,12 +2134,7 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
         if (side == "frontl") {
             dis = sensorDistance.getDistance(DistanceUnit.INCH);
         }
-        if (side == "right") {
-            dis = sensorDistancer.getDistance(DistanceUnit.INCH);;
-        }
-        if (side == "left") {
-            dis = sensorDistancel.getDistance(DistanceUnit.INCH);;
-        }
+
 
         return dis;
     }
@@ -2130,7 +2157,38 @@ public class FTCOpenSourceAutonomousWorkwithmeep extends LinearOpMode {
         return pix;
     }
     public void drop(String side, String colr, double pix){
-        if (pix < 2) {
+        if (pix == 99){
+            grabby.setPosition(.75);
+            front_left.setPower(-.5);
+            front_right.setPower(-.5);
+            rear_left.setPower(-.5);
+            rear_right.setPower(-.5);
+
+            sleep(180);
+            front_left.setPower(0);
+            front_right.setPower(0);
+            rear_left.setPower(0);
+            rear_right.setPower(0);
+            armpose(2);
+            front_left.setPower(.5);
+            front_right.setPower(.5);
+            rear_left.setPower(.5);
+            rear_right.setPower(.5);
+
+            sleep(120);
+            grabby.setPosition(.97);
+            sleep(100);
+            front_left.setPower(-.5);
+            front_right.setPower(-.5);
+            rear_left.setPower(-.5);
+            rear_right.setPower(-.5);
+            sleep(200);
+            front_left.setPower(0);
+            front_right.setPower(0);
+            rear_left.setPower(0);
+            rear_right.setPower(0);
+            b();
+        } else if (pix < 2) {
             grabby.setPosition(.75);
             front_left.setPower(-.5);
             front_right.setPower(-.5);
