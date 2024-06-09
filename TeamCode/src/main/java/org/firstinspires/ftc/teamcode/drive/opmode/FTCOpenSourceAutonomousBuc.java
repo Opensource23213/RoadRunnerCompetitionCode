@@ -1799,12 +1799,12 @@ public class FTCOpenSourceAutonomousBuc extends LinearOpMode {
 
                                         traj7 = drive.trajectorySequenceBuilder(traj5.end())
                                                 .splineToConstantHeading(new Vector2d(31, -76), Math.toRadians(180))
-                                                .splineToConstantHeading(new Vector2d(27, -72), Math.toRadians(180))
+                                                .splineToConstantHeading(new Vector2d(29, -72), Math.toRadians(180))
                                                 .build();
                                         drive.followTrajectorySequence(traj7);
                                         armout(2);
                                         traj8 = drive.trajectorySequenceBuilder(traj7.end())
-                                                .lineToLinearHeading(getaprilpose(6, 28,-72,-90, -72, 25))
+                                                .lineToLinearHeading(getaprilpose(6, 30,-72,-90, -72, 25))
                                                 .build();
                                         drive.followTrajectorySequence(traj8);
                                         drop("frontl", "red", pix);

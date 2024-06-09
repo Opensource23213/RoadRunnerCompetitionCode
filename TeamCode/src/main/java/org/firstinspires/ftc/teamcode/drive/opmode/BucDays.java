@@ -83,7 +83,6 @@ public class BucDays extends LinearOpMode {
     private Servo lifty = null;
     private Servo shooty;
     private DistanceSensor sensorDistance;
-    private DistanceSensor IntakeDis;
     private DistanceSensor sensorDistance2;
     private DistanceSensor flippydis;
     @Override
@@ -137,8 +136,6 @@ public class BucDays extends LinearOpMode {
         sensorDistance = hardwareMap.get(DistanceSensor.class, "sensorDistance");
         sensorDistance2 = hardwareMap.get(DistanceSensor.class, "sensorDistance2");
         flippydis = hardwareMap.get(DistanceSensor.class, "flippydis");
-        IntakeDis = hardwareMap.get(DistanceSensor.class, "IntakeDis");
-        Rev2mDistanceSensor IntakeDistime = (Rev2mDistanceSensor) IntakeDis;
         Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor) sensorDistance;
         Rev2mDistanceSensor sensorTimeOfFlight2 = (Rev2mDistanceSensor) sensorDistance2;
         Rev2mDistanceSensor sensorTimeOfFlight3 = (Rev2mDistanceSensor) flippydis;
@@ -269,7 +266,6 @@ public class BucDays extends LinearOpMode {
             double dis = (sensorDistance.getDistance(DistanceUnit.INCH) + sensorDistance2.getDistance(DistanceUnit.INCH))/2;
             double flipdis = flippydis.getDistance(DistanceUnit.INCH);
             double wheeldis = vertwheel.getCurrentPosition() * ticksinch;
-            boolean Intakepix = IntakeDis.getDistance(DistanceUnit.MM) < 67;
             // servo position in degrees
             double elbowDegree = elbow1.getPosition() * 355;
             double wristDegree = (wristy.getPosition() * 355 + serAdjust) * mult;
@@ -956,7 +952,6 @@ public class BucDays extends LinearOpMode {
             telemetry.addLine("Arm Values:");
             telemetry.addLine("");
             telemetry.addData("Shoulder Arm", "Angle: " + armAngle);
-            telemetry.addData("Shoulder Arm", "Angle: " + IntakeDis.getDistance(DistanceUnit.MM));
             telemetry.addData("Elbow Joint", "Value: " + elbow);
             telemetry.addData("Wrist", (wristy.getPosition() * 355 + serAdjust)* mult);
             telemetry.addLine("");
